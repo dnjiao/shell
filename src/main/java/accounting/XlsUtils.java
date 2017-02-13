@@ -35,8 +35,6 @@ public class XlsUtils {
 		List<Settlement> leasePA = new ArrayList<Settlement>();
 		for (int rowId = 1; rowId <= sheet.getLastRowNum(); rowId++)
     	{
-			int buySellFlag = -1;
-			int bulkLeaseFlag = -1;
 			row = sheet.getRow(rowId);
 			Settlement settlement = new Settlement();
 			cell = row.getCell(colNameMap.get("Contract#"));
@@ -53,24 +51,14 @@ public class XlsUtils {
 			}
 			cell = row.getCell(colNameMap.get("STA Netting\nBuy/Sell Flag"));
 			if (cell != null) {
-				String str = cell.getStringCellValue();
-				if (str.equalsIgnoreCase("buy")) {
-					buySellFlag = 0;
-				} else if (str.equalsIgnoreCase("Sell")) {
-					buySellFlag = 1;
-				}
-				settlement.setBuySellFlag(str);
+				settlement.setBuySellFlag(cell.getStringCellValue());
 			}
 			cell = row.getCell(colNameMap.get("Location"));
 			if (cell != null) {
 				settlement.setLocation(cell.getStringCellValue());
 			}
 			cell = row.getCell(colNameMap.get("Lease#"));
-			if (cell == null) {
-				bulkLeaseFlag = 0;
-			}
-			else {
-				bulkLeaseFlag = 1;
+			if (cell != null) {
 				settlement.setLeaseNo(cell.getStringCellValue());
 			}
 			cell = row.getCell(colNameMap.get("Lease\nName"));
@@ -90,36 +78,39 @@ public class XlsUtils {
 				settlement.setSettleAmount(cell.getNumericCellValue());
 			}
 			
-			if (buySellFlag == 0) {
-				if (bulkLeaseFlag == 0) {
-					bulkPA.add(settlement);
-				} else {
-					leasePA.add(settlement);
-				} 
-			} else if (buySellFlag == 0) {
-				if (bulkLeaseFlag == 0) {
+			if (settlement.getBuySellFlag().equalsIgnoreCase("Buy")) {
+				if (settlement.getLeaseName() == null || settlement.getLeaseName().equalsIgnoreCase("NA")) {
 					bulkSA.add(settlement);
 				} else {
 					leaseSA.add(settlement);
-				} 
+				}
+			} else if (settlement.getBuySellFlag().equalsIgnoreCase("Sell")) {
+				if (settlement.getLocation().endsWith("Lease Sale")) {
+					leasePA.add(settlement);
+				} else {
+					bulkPA.add(settlement);
+				}
 			} else {
 				System.out.println("ERROR in row " + Integer.toString(rowId) + " invalid value in Buy/Sell Flag column.");
 			}
     	}
-		masterList.add(bulkSA);
-		masterList.add(leaseSA);
-		masterList.add(bulkPA);
-		masterList.add(leasePA);
+		Map<String, List<Settlement>> bsMap = groupBySmartNo(bulkSA);
+		Map<String, List<Settlement>> lsMap = groupBySmartNo(leaseSA);
+		Map<String, List<Settlement>> bpMap = groupBySmartNo(bulkPA);
+		Map<String, List<Settlement>> lpMap = groupBySmartNo(leasePA);
+		
 		return masterList;
 	}
 	
-	public static List<List<Settlement>> groupBySmartNo(List<List<Settlement>> lists) {
-		List<List<Settlement>> newLists = new ArrayList<List<Settlement>>(4);
-		for (List<Settlement> list : lists) {
-			Map<String, List<Settlement>> map = new HashMap<String, List<Settlement>>();
-			map = list.stream().collect(Collectors.groupingBy(Settlement::getSmartNo));
-			
-		}
+	public static Map<String, List<Settlement>> groupBySmartNo(List<Settlement> list) {
+		Map<String, List<Settlement>> map = new HashMap<String, List<Settlement>>();
+		map = list.stream().collect(Collectors.groupingBy(Settlement::getSmartNo));
+		return map;
+	}
+	
+	public static Map<Integer, Double> summingAmount(Map<String, List<Settlement>> map) {
+		Map<Integer, Double> volPriceMap = new HashMap<>
+		
 	}
 
 	private static Map<String, Integer> getColNameMap(Row row) {
