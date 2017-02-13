@@ -1,4 +1,4 @@
-package accounting;
+package util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,12 +17,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import models.Settlement;
+import models.VolPricePair;
 
-public class XlsUtils {
-	final static Logger logger = Logger.getLogger(XlsUtils.class);
+public class SettlementXls {
+	final static Logger logger = Logger.getLogger(SettlementXls.class);
 	
-	public static List<List<Settlement>> readSettlementXls(String xlsPath) throws IOException {
-		List<List<Settlement>> masterList = new ArrayList<List<Settlement>>(4);
+	public static List<List<VolPricePair>> readSettlementXls(String xlsPath) throws IOException {
 		File inFile = new File(xlsPath);
 		Workbook workbook = new XSSFWorkbook(new FileInputStream(inFile));
 		Sheet sheet = workbook.getSheetAt(0);
@@ -98,7 +98,16 @@ public class XlsUtils {
 		Map<String, List<Settlement>> lsMap = groupBySmartNo(leaseSA);
 		Map<String, List<Settlement>> bpMap = groupBySmartNo(bulkPA);
 		Map<String, List<Settlement>> lpMap = groupBySmartNo(leasePA);
+		List<VolPricePair> bsPair = summingAmount(bsMap);
+		List<VolPricePair> lsPair = summingAmount(lsMap);
+		List<VolPricePair> bpPair = summingAmount(bpMap);
+		List<VolPricePair> lpPair = summingAmount(lpMap);
 		
+		List<List<VolPricePair>> masterList = new ArrayList<List<VolPricePair>>(4);
+		masterList.add(bsPair);
+		masterList.add(lsPair);
+		masterList.add(bpPair);
+		masterList.add(lpPair);
 		return masterList;
 	}
 	
@@ -108,9 +117,19 @@ public class XlsUtils {
 		return map;
 	}
 	
-	public static Map<Integer, Double> summingAmount(Map<String, List<Settlement>> map) {
-		Map<Integer, Double> volPriceMap = new HashMap<>
-		
+	public static List<VolPricePair> summingAmount(Map<String, List<Settlement>> map) {
+		List<VolPricePair> vpList = new ArrayList<VolPricePair>();
+		for (Map.Entry<String, List<Settlement>> entry : map.entrySet()) {
+			VolPricePair vp = new VolPricePair();
+		    double total = 0.0;
+		    for (Settlement sett : entry.getValue()) {
+		    	total += sett.getSettleAmount();
+		    	vp.setVolume(sett.getVolume());
+		    }
+		    vp.setPrice(total);
+		    vpList.add(vp);
+		}
+		return vpList;
 	}
 
 	private static Map<String, Integer> getColNameMap(Row row) {
