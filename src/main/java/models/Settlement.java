@@ -1,20 +1,57 @@
 package models;
 
 public class Settlement {
+	private String period;
+	private String buySellFlag;
+	private String status;
+	private String date;
 	private String contractNo;
 	private String smartNo;
 	private String dealTrackNo;
-	private String buySellFlag;
+	
 	private String cashFlowType;
 	private String location;
 	private String leaseNo;
 	private String leaseName;
+	
+	private int commitment;
 	private double volume;
 	private double price;
 	private double settleAmount;
 	
 	public Settlement() {
 		super();
+	}
+
+	public String getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(String period) {
+		this.period = period;
+	}
+	public String getBuySellFlag() {
+		return buySellFlag;
+	}
+
+	public void setBuySellFlag(String buySellFlag) {
+		this.buySellFlag = buySellFlag;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 	public String getContractNo() {
@@ -41,13 +78,7 @@ public class Settlement {
 		this.dealTrackNo = dealTrackNo;
 	}
 
-	public String getBuySellFlag() {
-		return buySellFlag;
-	}
 
-	public void setBuySellFlag(String buySellFlag) {
-		this.buySellFlag = buySellFlag;
-	}
 
 	public String getCashFlowType() {
 		return cashFlowType;
@@ -79,6 +110,14 @@ public class Settlement {
 
 	public void setLeaseName(String leaseName) {
 		this.leaseName = leaseName;
+	}
+
+	public int getCommitment() {
+		return commitment;
+	}
+
+	public void setCommitment(int commitment) {
+		this.commitment = commitment;
 	}
 
 	public double getVolume() {
