@@ -5,16 +5,20 @@ public class Settlement {
 	private String buySellFlag;
 	private String status;
 	private String date;
-	private String contractNo;
 	private String smartNo;
-	private String dealTrackNo;
-	
+	private String unit;
+	private String currency;
 	private String cashFlowType;
 	private String location;
 	private String leaseNo;
 	private String leaseName;
-	
+	private String product;
+	private String pipeline;
+
+	private int contractNo;
 	private int commitment;
+	private int dealTrackNo;
+	
 	private double volume;
 	private double price;
 	private double settleAmount;
@@ -54,11 +58,11 @@ public class Settlement {
 		this.date = date;
 	}
 
-	public String getContractNo() {
+	public int getContractNo() {
 		return contractNo;
 	}
 
-	public void setContractNo(String contractNo) {
+	public void setContractNo(int contractNo) {
 		this.contractNo = contractNo;
 	}
 
@@ -70,14 +74,45 @@ public class Settlement {
 		this.smartNo = smartNo;
 	}
 
-	public String getDealTrackNo() {
+	public int getDealTrackNo() {
 		return dealTrackNo;
 	}
 
-	public void setDealTrackNo(String dealTrackNo) {
+	public void setDealTrackNo(int dealTrackNo) {
 		this.dealTrackNo = dealTrackNo;
 	}
 
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
+	public String getProduct() {
+		return product;
+	}
+
+	public void setProduct(String product) {
+		this.product = product;
+	}
+
+	public String getPipeline() {
+		return pipeline;
+	}
+
+	public void setPipeline(String pipeline) {
+		this.pipeline = pipeline;
+	}
 
 
 	public String getCashFlowType() {
