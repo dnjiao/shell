@@ -15,15 +15,35 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import models.Pivot;
 import models.Settlement;
 import models.VolPricePair;
 
 public class SunocoXls {
-	public static void readSettlementXls(String inXls, String outXls, List<List<VolPricePair>> vpPairs) throws IOException {
+	public static List<List<Pivot>> readSettlementXls(String inXls) throws IOException {
 		File inFile = new File(inXls);
-		XSSFWorkbook inBook = new XSSFWorkbook(new FileInputStream(inFile));
-		FileInputStream inp = new FileInputStream(outXls);
-		XSSFWorkbook outBook = new XSSFWorkbook(inp);
+		XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(inFile));
+		XSSFSheet sheet = workbook.getSheetAt(0);
+		int readFlag = 0;
+
+		for (int rowId = 0; rowId < sheet.getLastRowNum(); rowId++) {
+			Row row = sheet.getRow(rowId);
+			if (row.getCell(0) != null) {
+				if (row.getCell(0).getStringCellValue().toLowerCase().startsWith("account"))) {
+					readFlag = 1;
+					continue;
+				}
+			}
+			if (readFlag == 1) {
+				Pivot pivot = new Pivot();
+				pivot.setAccount(row.getCell(0).getStringCellValue());
+				pivot.setInvoice(row.getCell(1).getStringCellValue());
+				pivot.setVolume(row.getCell(2).getNumericCellValue());
+				pivot.setPrice(row.getCell(3).getNumericCellValue());
+			}
+		}
+		
+		while (cell )
 		for (int i = 0; i < inBook.getNumberOfSheets(); i++){
 			String sheetName = inBook.getSheetName(i).toLowerCase();
 			XSSFSheet inSheet = inBook.getSheetAt(i);
