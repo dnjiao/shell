@@ -14,10 +14,14 @@ public class Settlement {
 	private String leaseName;
 	private String product;
 	private String pipeline;
+	private String qbIndex;
+	private String agreement;
 
 	private int contractNo;
 	private int commitment;
 	private int dealTrackNo;
+	private int eventNo;
+	private int eTrackNo;
 	
 	private double volume;
 	private double price;
@@ -114,6 +118,38 @@ public class Settlement {
 		this.pipeline = pipeline;
 	}
 
+
+	public String getQbIndex() {
+		return qbIndex;
+	}
+
+	public void setQbIndex(String qbIndex) {
+		this.qbIndex = qbIndex;
+	}
+
+	public String getAgreement() {
+		return agreement;
+	}
+
+	public void setAgreement(String agreement) {
+		this.agreement = agreement;
+	}
+
+	public int getEventNo() {
+		return eventNo;
+	}
+
+	public void setEventNo(int eventNo) {
+		this.eventNo = eventNo;
+	}
+
+	public int getETrackNo() {
+		return eTrackNo;
+	}
+
+	public void setETrackNo(int eTrackNo) {
+		this.eTrackNo = eTrackNo;
+	}
 
 	public String getCashFlowType() {
 		return cashFlowType;

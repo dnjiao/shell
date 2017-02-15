@@ -121,6 +121,22 @@ public class SettlementXls {
 			if (cell != null) {
 				settlement.setPipeline(cell.getStringCellValue());
 			}
+			cell = row.getCell(colNameMap.get("qb"));
+			if (cell != null) {
+				settlement.setQbIndex(cell.getStringCellValue());
+			}
+			cell = row.getCell(colNameMap.get("agreement"));
+			if (cell != null) {
+				settlement.setAgreement(cell.getStringCellValue());
+			}
+			cell = row.getCell(colNameMap.get("eventno"));
+			if (cell != null) {
+				settlement.setEventNo((int)cell.getNumericCellValue());
+			}
+			cell = row.getCell(colNameMap.get("etrack"));
+			if (cell != null) {
+				settlement.setETrackNo((int)cell.getNumericCellValue());
+			}
 			
 			// Determine category based on buy/sell flag and lease name
 			if (settlement.getBuySellFlag().equalsIgnoreCase("Buy")) {
@@ -283,8 +299,7 @@ public class SettlementXls {
 				if (name.trim().endsWith("product"))
 					map.put("product", i);
 				if (name.contains("pipeline") && name.contains("name"))
-					map.put("pipeline", i);		
-				
+					map.put("pipeline", i);					
 			}
 		}
 		return map;
