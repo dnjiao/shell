@@ -19,21 +19,26 @@ public class SunocoXls {
 		XSSFWorkbook workbook = new XSSFWorkbook(input);
 		XSSFSheet sheet = null;
 		List<Settlement> settlements = null;
+		int coeff;
 		for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
 			// find corresponding list for each tab
 			String sheetName = workbook.getSheetName(i).toLowerCase().trim();	
 			sheet = workbook.getSheetAt(i);
 			if (sheetName.contains("bulk") && sheetName.contains("ar")) {
 				settlements = lists.get(0);
+				coeff = -1;
 			} else if (sheetName.contains("lease") && sheetName.contains("ar")) {
 				settlements = lists.get(1);
+				coeff = -1;
 			} else if (sheetName.contains("bulk") && sheetName.contains("ap")) {
 				settlements = lists.get(2);
+				coeff = 1;
 			} else {
 				break;
 			}	
 			
-			double epsilon = 0.001;
+			double volEps = 0.1;
+			double priceEps = 2.0;
 			int rowId;
 			for (rowId = 6; rowId <= sheet.getLastRowNum(); rowId++)
 	    	{
@@ -53,9 +58,9 @@ public class SunocoXls {
 					Settlement s = iter.next();
 					double shellVolume = s.getVolume();
 					double shellPrice = s.getSettleAmount();
-					if (Math.abs(shellVolume - volume) < epsilon && Math.abs(shellPrice - price) < epsilon) {
+					if (Math.abs(shellVolume - volume) < volEps && Math.abs(shellPrice + price) < priceEps) {
 						row.getCell(7).setCellValue(shellVolume);
-						row.getCell(8).setCellValue(shellPrice);
+						row.getCell(8).setCellValue(shellPrice * coeff);
 						double base = shellPrice / shellVolume;
 						row.getCell(9).setCellValue(base);
 						iter.remove();
@@ -64,7 +69,7 @@ public class SunocoXls {
 				}
 	    	}
 			// skip the summary line
-			rowId += 3;
+			rowId += 30;
 			// If not all matched, append leftover at the bottom
 			if (settlements.size() > 0) {
 				for (Settlement sett : settlements) {
@@ -72,7 +77,7 @@ public class SunocoXls {
 					Cell cell = row.createCell(7);
 					cell.setCellValue(sett.getVolume());
 					cell = row.createCell(8);
-					cell.setCellValue(sett.getSettleAmount());
+					cell.setCellValue(sett.getSettleAmount() * coeff);
 					cell = row.createCell(9);
 					cell.setCellValue(sett.getSettleAmount() / sett.getVolume());
 				}

@@ -121,21 +121,9 @@ public class SettlementXls {
 			if (cell != null) {
 				settlement.setPipeline(cell.getStringCellValue());
 			}
-			cell = row.getCell(colNameMap.get("qb"));
-			if (cell != null) {
-				settlement.setQbIndex(cell.getStringCellValue());
-			}
 			cell = row.getCell(colNameMap.get("agreement"));
 			if (cell != null) {
 				settlement.setAgreement(cell.getStringCellValue());
-			}
-			cell = row.getCell(colNameMap.get("eventno"));
-			if (cell != null) {
-				settlement.setEventNo((int)cell.getNumericCellValue());
-			}
-			cell = row.getCell(colNameMap.get("etrack"));
-			if (cell != null) {
-				settlement.setETrackNo((int)cell.getNumericCellValue());
 			}
 			
 			// Determine category based on buy/sell flag and lease name
@@ -197,7 +185,8 @@ public class SettlementXls {
 			String[] cols = {"ProductionPeriod", "STA Netting Buy/Sell Flag", "Volume Status",
 					"Event Date", "Contract#", "Smart#", "Commitment#", "DealTracking #", 
 					"BAVVolume", "BAVVolume Unit", "DeliveryCurrency", "Cash FlowType", 
-					"CurrentSettle Amount", "Location",	"Lease#", "Lease Name", "Product", "Pipeline Name"};
+					"CurrentSettle Amount", "Location",	"Lease#", "Lease Name", 
+					"Product", "Pipeline Name", "Master Netting Agreement"};
 			for (int j = 0; j < cols.length; j++) {
 				cell = row.createCell(j);
 				cell.setCellValue(cols[j]);
@@ -246,6 +235,8 @@ public class SettlementXls {
 				cell.setCellValue(sett.getProduct());
 				cell = row.createCell(17);
 				cell.setCellValue(sett.getPipeline());
+				cell = row.createCell(18);
+				cell.setCellValue(sett.getAgreement());
 			}
 		}
 		
@@ -299,7 +290,10 @@ public class SettlementXls {
 				if (name.trim().endsWith("product"))
 					map.put("product", i);
 				if (name.contains("pipeline") && name.contains("name"))
-					map.put("pipeline", i);					
+					map.put("pipeline", i);		
+				if (name.contains("netting") && name.contains("agreement")) {
+					map.put("agreement", i);
+				}
 			}
 		}
 		return map;

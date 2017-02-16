@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import models.Settlement;
 import util.SettlementXls;
+import util.SunocoXls;
 
 public class ShellExe {
 
@@ -31,6 +32,9 @@ public class ShellExe {
 		System.out.println("Now appending tabs to " + xlsPath1);
 		SettlementXls.writeShellXls(lists, xlsPath1);
 		System.out.println("Update completed for " + xlsPath1);
+		System.out.println("Now updating spreadsheet in " + xlsPath2);
+		SunocoXls.processSettlementXls(xlsPath2, lists);
+		System.out.println("Update completed for " + xlsPath2);
 		
 		
 
