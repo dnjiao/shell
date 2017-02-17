@@ -32,7 +32,7 @@ public class SettlementXls {
 	public static List<List<Settlement>> readShellXls(String xlsPath) throws IOException {
 		File inFile = new File(xlsPath);
 		Workbook workbook = new XSSFWorkbook(new FileInputStream(inFile));
-		Sheet sheet = workbook.getSheetAt(0);
+		Sheet sheet = workbook.getSheetAt(1);
 		Row row = sheet.getRow(0);
 		Cell cell = null;
 		Map<String, Integer> colNameMap = getColNameMap(row);
@@ -43,11 +43,14 @@ public class SettlementXls {
 		for (int rowId = 1; rowId <= sheet.getLastRowNum(); rowId++)
     	{
 			row = sheet.getRow(rowId);
+			if (row == null) break;
 			Settlement settlement = new Settlement();
 			cell = row.getCell(colNameMap.get("period"));
 			if (cell != null) {
+				if (cell.getStringCellValue() == "") break;
 				settlement.setPeriod(cell.getStringCellValue());
-			}
+			} else 
+				break;
 			cell = row.getCell(colNameMap.get("flag"));
 			if (cell != null) {
 				settlement.setBuySellFlag(cell.getStringCellValue());
