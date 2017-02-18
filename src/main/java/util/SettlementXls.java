@@ -130,6 +130,7 @@ public class SettlementXls {
 			}
 			
 			// Determine category based on buy/sell flag and lease name
+			
 			if (settlement.getBuySellFlag().equalsIgnoreCase("Buy")) {
 				if (settlement.getLeaseName() == null || 
 						settlement.getLeaseName().equalsIgnoreCase("NA") ||
@@ -303,10 +304,10 @@ public class SettlementXls {
 	}
 	
 	private static List<Settlement> groupingSum(List<Settlement> list) {
-		Map<String, List<Settlement>> map = new HashMap<String, List<Settlement>>();
-		map = list.stream().collect(Collectors.groupingBy(Settlement::getSmartNo));
+		Map<Integer, List<Settlement>> map = new HashMap<Integer, List<Settlement>>();
+		map = list.stream().collect(Collectors.groupingBy(Settlement::getDealTrackNo));
 		List<Settlement> newList = new ArrayList<Settlement>();
-		for (Map.Entry<String, List<Settlement>> entry : map.entrySet()) {
+		for (Map.Entry<Integer, List<Settlement>> entry : map.entrySet()) {
 		    double total = 0.0;
 		    Settlement newSett = null;
 		    int copyFlag = 0;
